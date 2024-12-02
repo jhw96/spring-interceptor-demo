@@ -12,13 +12,13 @@ public class LoginServiceImpl {
     private MemberServiceImpl memberService;
 
 
-    public String login(String email, String password) {
+    public String login(String email, String password) throws RuntimeException {
         Member member = memberService.findByEmail(email);
 
         if(member.getPassword().equals(password))
             return member.getEmail();
-
-        return "Login Fail";
+        else
+            throw new RuntimeException("Login Fail");
     }
 
 }
