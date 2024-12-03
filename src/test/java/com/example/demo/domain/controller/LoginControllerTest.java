@@ -1,22 +1,26 @@
 package com.example.demo.domain.controller;
 
 import com.example.demo.domain.entity.Member;
-import org.assertj.core.api.Assertions;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class LoginControllerTest {
 
     final static Member member1 = new Member("test@test.com", "password");
@@ -27,6 +31,12 @@ public class LoginControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void 로그인_성공테스트() {
@@ -47,17 +57,18 @@ public class LoginControllerTest {
     }
 
     @Test
-    void 로그인_실패테스트() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    void 로그인_실패테스트() throws Exception {
 
-        String requestBody = "{\"email\":\"test@test.com\",\"password\":\"test\"}";
+        MvcResult result = mockMvc.perform(post("/login")
+                        .param("email", "test@test.com")
+                        .param("password", "test"))
+                .andExpect(status().isBadRequest())
+                .andReturn();
 
-        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+        String content = result.getResponse().getContentAsString();
+        String title = objectMapper.readTree(content).get("title").asText();
 
-        String url = "http://localhost:" + port + "/login";
-        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(title.equals("Bad Request"));
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.demo.domain.controller;
 
+import com.example.demo.domain.exception.CustomException;
 import com.example.demo.domain.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,12 +24,12 @@ public class LoginController {
         HttpHeaders headers = new HttpHeaders();
 
         ResponseEntity responseEntity;
-        try{
-            String response = loginServiceImpl.login(email,password);
-            responseEntity = new ResponseEntity<>(response, headers,HttpStatus.OK);
+        try {
+            String response = loginServiceImpl.login(email, password);
+            responseEntity = new ResponseEntity<>(response, headers, HttpStatus.OK);
 
-        } catch(RuntimeException exception) {
-            responseEntity = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } catch (RuntimeException exception) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "400", "Login Fail");
         }
 
         return responseEntity;
