@@ -52,9 +52,14 @@ public class LoginControllerTest {
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
 
-        assertThat(response.getBody()).isEqualTo(member1.getEmail());
+        String userJson = response.getBody();
+        System.out.println("세션정보: " + userJson);
+
+        assertThat(userJson).contains("\"email\":\"test@test.com\""); // 예상 값과 비교
+
 
     }
+
 
     @Test
     void 로그인_실패테스트() throws Exception {

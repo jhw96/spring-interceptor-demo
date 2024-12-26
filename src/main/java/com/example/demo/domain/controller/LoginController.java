@@ -19,19 +19,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<String> Login(@RequestBody Map<String, String> map) {
-        String email = map.get("email");
-        String password = map.get("password");
-        HttpHeaders headers = new HttpHeaders();
 
-        ResponseEntity responseEntity;
-        try {
-            String response = loginServiceImpl.login(email, password);
-            responseEntity = new ResponseEntity<>(response, headers, HttpStatus.OK);
-
-        } catch (RuntimeException exception) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "400", "Login Fail");
-        }
-
-        return responseEntity;
+        return ResponseEntity.ok().build();
     }
 }
