@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -37,12 +38,14 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String[] split = json.split(",");
 
-        String email = split[0].split(":")[1].replace("\"", "");
-        String password = split[1].split(":")[1].split("}")[0].replace("\"","");
+        // Request Body 파싱 시, 공백이 포함되서 Member 객체가 Null. 디버깅 필수
+        String email = split[0].split(":")[1].replace("\"", "").trim();
+        String password = split[1].split(":")[1].split("}")[0].replace("\"","").trim();
 
         Member member = memberService.findByEmail(email);
 
         if (!member.getPassword().equals(password)) {
+            System.out.println("Login Fail");
             throw new CustomException(HttpStatus.BAD_REQUEST, "400", "Login Fail");
         }
 

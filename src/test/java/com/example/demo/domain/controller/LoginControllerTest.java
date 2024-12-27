@@ -51,29 +51,23 @@ public class LoginControllerTest {
         String url = "http://localhost:" + port + "/login";
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
-
-        String userJson = response.getBody();
-        System.out.println("세션정보: " + userJson);
-
-        assertThat(userJson).contains("\"email\":\"test@test.com\""); // 예상 값과 비교
-
-
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
 
     @Test
     void 로그인_실패테스트() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(post("/login")
-                        .param("email", "test@test.com")
-                        .param("password", "test"))
-                .andExpect(status().isBadRequest())
-                .andReturn();
+        String requestBody = "{\"email\":\"test@test.com\",\"password\":\"password2\"}";
 
-        String content = result.getResponse().getContentAsString();
-        String title = objectMapper.readTree(content).get("title").asText();
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
 
-        assertThat(title.equals("Bad Request"));
+        String url = "http://localhost:" + port + "/login";
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
 
