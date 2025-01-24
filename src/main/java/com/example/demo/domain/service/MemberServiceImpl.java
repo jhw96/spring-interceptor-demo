@@ -1,6 +1,7 @@
 package com.example.demo.domain.service;
 
 import com.example.demo.domain.entity.Member;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +30,5 @@ public class MemberServiceImpl {
     public List<Member> getMemberList() {
         return new ArrayList<>(memberRepository.values());
     }
-
-
 
 }
