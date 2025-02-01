@@ -45,7 +45,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         Member member = memberService.findByEmail(email);
 
         if (!member.getPassword().equals(password)) {
-            System.out.println("Login Fail");
             throw new CustomException(HttpStatus.BAD_REQUEST, "400", "Login Fail");
         }
 

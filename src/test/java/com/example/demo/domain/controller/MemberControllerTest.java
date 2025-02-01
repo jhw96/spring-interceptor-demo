@@ -32,6 +32,9 @@ public class MemberControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
     @Test
     void 멤버조회_테스트() throws Exception {
         // Given
@@ -50,6 +53,18 @@ public class MemberControllerTest {
 
         // Then
         assertThat(actualMember).isEqualTo(expectedMember);
+    }
+
+    @Test
+    void 멤버조회_실패테스트() throws Exception {
+        //Given
+        String email = "test3@test.com";
+
+        // When
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/member")
+                        .param("email", email)) // 쿼리 파라미터 추가
+                        .andExpect(status().isBadRequest())
+                        .andReturn();
     }
 
 }

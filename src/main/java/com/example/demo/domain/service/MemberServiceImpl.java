@@ -1,6 +1,8 @@
 package com.example.demo.domain.service;
 
 import com.example.demo.domain.entity.Member;
+import com.example.demo.domain.exception.CustomException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,13 @@ public class MemberServiceImpl {
     }
 
     public Member findByEmail(String email) {
-        return memberRepository.get(email);
+        Member member = memberRepository.get(email);
+
+        if(member.equals(null)) {
+            throw new RuntimeException("No Data Exception");
+        }
+
+        return member;
     }
 
     public List<Member> getMemberList() {
