@@ -2,6 +2,7 @@ package com.example.demo.domain.intercepter;
 
 import com.example.demo.domain.entity.Member;
 import com.example.demo.domain.exception.CustomException;
+import com.example.demo.domain.exception.ErrorCode;
 import com.example.demo.domain.service.MemberServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         Member member = memberService.findByEmail(email);
 
         if (!member.getPassword().equals(password)) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "400", "Login Fail");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         request.getSession().setAttribute(SPRING_SECURITY_CONTEXT_KEY, member);

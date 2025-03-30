@@ -1,5 +1,6 @@
 package com.example.demo.domain.config;
 
+import com.example.demo.domain.intercepter.LoggerInterceptor;
 import com.example.demo.domain.intercepter.LoginInterceptor;
 import com.example.demo.domain.service.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private MemberServiceImpl memberService;
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoggerInterceptor())
+                .excludePathPatterns("/css/**", "/images/**", "/js/**");
         registry.addInterceptor(new LoginInterceptor(memberService))
                 .addPathPatterns("/login");
     }
+
 }

@@ -4,13 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public final ResponseEntity<Object> handleCustomException(CustomException customException) {
-        return new ResponseEntity(customException, HttpStatus.BAD_REQUEST);
+    protected ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException e){
+        return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 }
