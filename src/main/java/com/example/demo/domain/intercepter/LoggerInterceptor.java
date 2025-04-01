@@ -12,6 +12,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Request URI : " + request.getRequestURI() + "\nRequest SESSION ID : "  + request.getSession().getId() + "\n");
+        log.info("parameters : " + request.getParameterNames());
         return true;
     }
 

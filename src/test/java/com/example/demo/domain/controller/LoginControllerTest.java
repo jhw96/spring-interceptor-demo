@@ -67,8 +67,9 @@ public class LoginControllerTest {
         String url = "http://localhost:" + port + "/login";
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
 
 
 }

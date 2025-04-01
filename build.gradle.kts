@@ -23,6 +23,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation ("org.projectlombok:lombok")
 	annotationProcessor ("org.projectlombok:lombok")
+	implementation ("org.apache.tomcat.embed:tomcat-embed-jasper")
+	implementation ("javax.servlet:jstl:1.2")
 }
 
 tasks.withType<Test> {
