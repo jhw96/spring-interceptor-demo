@@ -11,4 +11,9 @@ public class TestController {
         return "login";
     }
 
+    @GetMapping("/main")
+    public String main() {
+        return "main";
+    }
+
 }
